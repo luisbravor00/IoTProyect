@@ -1,20 +1,11 @@
-from flask import Flask, request
-from pymongo import MongoClient
+from flask import Flask
+from routes.prescriptions_route import prescriptions_blueprint
+from routes.users_route import users_blueprint
 
 app = Flask(__name__)
 
-# Conexión a la base de datos MongoDB
-client = MongoClient('mongodb+srv://iotadmin:iotadmin@test.mygbwdt.mongodb.net/', 27017)
-db = client['IoT']  # Reemplaza 'tu_base_de_datos' con el nombre de tu base de datos
-collection = db['usuarios']  # Nombre de la colección donde se guardarán los datos
-
-@app.route('/datos', methods=['GET'])
-def obtener_usuarios():
-    # Consulta para obtener todos los usuarios
-    usuarios = collection.find()
-    # Convertir el resultado en una lista de diccionarios
-    lista_usuarios = [usuario for usuario in usuarios]
-    return lista_usuarios
+app.register_blueprint(prescriptions_blueprint, url_prefix='/prescriptions')
+app.register_blueprint(users_blueprint, url_prefix='/users')
 
 if __name__ == '__main__':
-    app.run(port=3000)
+    app.run(port=7070)
