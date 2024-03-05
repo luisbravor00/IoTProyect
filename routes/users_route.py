@@ -24,3 +24,15 @@ def users_home():
 @users_blueprint.route('/details')
 def users_detail():
     return 'Detalle de users', HTTP_OK
+
+## GET All Users
+@users_blueprint.route('/data')
+def users_get_users():
+    users_cursor = users_collection.find({})  # Obtener todos los usuarios
+    users_list = list(users_cursor)  # Convertir el cursor a lista
+
+    # Convertir los ObjectId a string para la serialización JSON
+    for user in users_list:
+        user["_id"] = str(user["_id"])
+
+    return jsonify(users_list), HTTP_OK
