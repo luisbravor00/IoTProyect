@@ -1,3 +1,7 @@
 venv/
 config/__pycache__/
 routes/__pycache__/
+ewallet.pem
+tnsnames.ora
+.env
+/IOT
