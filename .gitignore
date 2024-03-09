@@ -5,3 +5,4 @@ ewallet.pem
 tnsnames.ora
 .env
 /IOT
+/__pycache__
