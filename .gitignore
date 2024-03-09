@@ -6,3 +6,5 @@ tnsnames.ora
 .env
 /IOT
 /__pycache__
+controllers/__pycache__/
+models/__pycache__/
