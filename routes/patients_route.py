@@ -20,7 +20,7 @@ def patients_detail():
 
 ## GET All patients
 @patients_blueprint.route('/data')
-def patients_get_patients():
+def patients_get_all():
     query = "SELECT * FROM Patients"
     cursor.execute(query)
     result = cursor.fetchall()

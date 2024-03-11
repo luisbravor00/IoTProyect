@@ -21,4 +21,16 @@ def doctors_detail():
 ## GET All doctors
 @doctors_blueprint.route('/data')
 def doctors_get_all():
-    return "OK", HTTP_OK 
+
+    query = "SELECT * FROM doctors"
+    cursor.execute(query)
+    result = cursor.fetchall()
+
+    doctorInfo = []
+    columns = ['certId', 'name', 'last_name', 'phoneNumber', 'OfficeAddress']
+
+    for row in result:
+        doctor_dict = {columns[i]: row[i] for i in range(len(columns))}
+        doctorInfo.append(doctor_dict)
+
+    return jsonify(doctorInfo), HTTP_OK
