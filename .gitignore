@@ -8,3 +8,5 @@ tnsnames.ora
 /__pycache__
 controllers/__pycache__/
 models/__pycache__/
+tests/
+test_connection.py

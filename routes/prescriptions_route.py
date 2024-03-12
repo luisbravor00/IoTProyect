@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request
-from pymongo import MongoClient
 from datetime import datetime
 from config.config import *
 from controllers.conn import connection, cursor
+import controllers.utilities as ut
 
 prescriptions_blueprint = Blueprint('prescriptions', __name__)
 
@@ -21,4 +21,10 @@ def prescriptions_detail():
 ## GET All Prescriptions
 @prescriptions_blueprint.route('/data')
 def prescriptions_get_all():
-    return "OK", HTTP_OK 
+    query = "SELECT * FROM Prescription"
+    cursor.execute(query)
+    result = cursor.fetchall()
+
+    prescriptions_list = ut.get_dictionary_from_query(result, cursor)
+
+    return jsonify(prescriptions_list), HTTP_OK
