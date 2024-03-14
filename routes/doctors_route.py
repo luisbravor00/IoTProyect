@@ -28,3 +28,22 @@ def doctors_get_all():
     doctors_list = ut.get_dictionary_from_query(result, cursor)
 
     return jsonify(doctors_list), HTTP_OK
+
+## GET Doctor By ID
+@doctors_blueprint.route('/doctor')
+def doctors_get_doctor_by_id():
+    id_doctor = request.args.get('id_doctor', type=int)
+
+    if not id_doctor:
+        return jsonify({"error": "ID_DOCTOR is required."}), HTTP_BAD_REQUEST
+
+    query = "SELECT * FROM Doctors WHERE ID_DOCTOR = :id_doctor"
+    cursor.execute(query, [id_doctor])
+    result = cursor.fetchall()
+
+    if not result:
+        return jsonify({"error": "Doctor not found."}), HTTP_NOT_FOUND
+
+    doctor = ut.get_dictionary_from_query(result, cursor)
+
+    return jsonify(doctor), HTTP_OK
