@@ -1,5 +1,4 @@
 # Credentials
-
 username = 'iotadmin'
 password = 'iotadmin'
 

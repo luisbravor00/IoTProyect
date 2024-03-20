@@ -1,0 +1,8 @@
+iotdatabase_high = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.us-ashburn-1.oraclecloud.com))(connect_data=(service_name=g4a1d86d8e421b7_iotdatabase_high.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+iotdatabase_low = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.us-ashburn-1.oraclecloud.com))(connect_data=(service_name=g4a1d86d8e421b7_iotdatabase_low.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+iotdatabase_medium = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.us-ashburn-1.oraclecloud.com))(connect_data=(service_name=g4a1d86d8e421b7_iotdatabase_medium.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+
+
