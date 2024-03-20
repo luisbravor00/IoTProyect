@@ -16,6 +16,7 @@ def index():
     return "<h1>Hello!</h1>"
 
 if __name__ == '__main__':
-    #app.run(port=7070)
-    from waitress import serve
-    serve(app, host="0.0.0.0", port=8080)
+    # app.run(port=7070)
+    index()
+    #from waitress import serve
+    #serve(app, host="0.0.0.0", port=8080)
