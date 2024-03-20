@@ -55,22 +55,33 @@ def prescriptions_get_all():
 
     return jsonify(prescriptions_list), HTTP_OK
 
-## GET All Prescriptions
 @prescriptions_blueprint.route('/prescription')
-def prescriptions_get_prescription_by_id_patient():
+def prescriptions_get_prescription_by_id():
+    parameters = {}
+    where_clauses = []
 
     id_patient = request.args.get('id_patient', type=int)
+    if id_patient:
+        where_clauses.append("Patients.ID_Patient = :id_patient")
+        parameters['id_patient'] = id_patient
 
-    if not id_patient:
-        return jsonify({"error": "ID_PATIENT is required."}), HTTP_BAD_REQUEST
+    id_doctor = request.args.get('id_doctor', type=int)
+    if id_doctor:
+        where_clauses.append("Doctors.ID_Doctor = :id_doctor")
+        parameters['id_doctor'] = id_doctor
+    
+    id_prescription = request.args.get('id_prescription', type=int)
+    if id_prescription:
+        where_clauses.append("Prescription.ID_Prescription = :id_prescription")
+        parameters['id_prescription'] = id_prescription
 
     query = """ SELECT
-                    Patients.Name || ' ' || Patients.Last_name AS "Patient_Name",
+                    Patients.Name || ' ' || Patients.Last_name AS "PATIENT_NAME",
                     Patients.Address AS Patient_Address,
                     Patients.Age AS Patient_Age,
                     Patients.Phone AS Patient_Phone,
                     Patients.Email AS Patient_Email,
-                    Doctors.Name || ' ' || Doctors.Last_name AS "Doctor_Name",
+                    Doctors.Name || ' ' || Doctors.Last_name AS "DOCTOR_NAME",
                     Doctors.Phone_num AS Doctor_Phone,
                     Doctors.Office_add AS Doctor_Address,
                     Prescription.ID_Prescription,
@@ -88,13 +99,18 @@ def prescriptions_get_prescription_by_id_patient():
                     Prescription_Details ON Prescription.ID_Prescription = Prescription_Details.ID_Prescription
                 INNER JOIN
                     Medicine ON Prescription_Details.ID_Medication = Medicine.ID_Medication
-                WHERE Patients.ID_Patient = :id_patient
-            """
-    cursor.execute(query, [id_patient])
+             """
+
+    if not where_clauses:
+        return jsonify({"error": "No results found."}), HTTP_NOT_FOUND
+    
+    query += " WHERE " + " AND ".join(where_clauses)
+
+    cursor.execute(query, parameters)
     result = cursor.fetchall()
     
     if not result:
-        return jsonify({"error": "Patient not found."}), HTTP_NOT_FOUND
+        return jsonify({"error": "No results found."}), HTTP_NOT_FOUND
 
     prescriptions_list = ut.get_dictionary_from_query(result, cursor)
 

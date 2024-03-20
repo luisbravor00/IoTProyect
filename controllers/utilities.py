@@ -1,4 +1,7 @@
+import random
 
+def generate_random_number():
+    return random.randint(10000000, 99999999)
 
 def get_all_columns(cursor):
     columns = [desc[0] for desc in cursor.description]
