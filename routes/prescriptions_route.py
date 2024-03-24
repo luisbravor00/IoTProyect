@@ -115,3 +115,24 @@ def prescriptions_get_prescription_by_id():
     prescriptions_list = ut.get_dictionary_from_query(result, cursor)
 
     return jsonify(prescriptions_list), HTTP_OK
+
+#Post Prescriptions
+@prescriptions_blueprint.route('/add', methods=['POSTS'])
+def prescription_post_prescription():
+    data = request.json
+
+    if not all(key in data for key in ['prescriptionId', 'doctorId', 'patientId', 'date']):
+        return jsonify({"error": "Missing data from one or more fields"}), HTTP_BAD_REQUEST
+
+    prescriptionID = ut.generate_random_number()
+
+    query = "INSERT INTO Prescription (prescriptionId, doctorId, patientId, date) VALUES (:prescriptionId, :doctorId, :patientId, :date)"
+
+    try:
+        cursor.execute(query, [prescriptionID, data['prescriptionId'], data['doctorId'], data['patientId'], data['date']])
+        connection.commit()
+        return jsonify({"success": "Prescription added successfully"}), HTTP_OK
+
+    except Exception as e:
+        connection.rollback()
+        return jsonify({"error": str(e)}), HTTP_IM_A_TEAPOT
