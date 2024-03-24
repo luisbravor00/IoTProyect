@@ -47,3 +47,25 @@ def doctors_get_doctor_by_id():
     doctor = ut.get_dictionary_from_query(result, cursor)
 
     return jsonify(doctor), HTTP_OK
+
+## POST Doctor
+@doctors_blueprint.route('/add', methods=['POST'])
+def doctor_post_medicine():
+    data = request.json
+
+    if not all(key in data for key in ['certId', 'name', 'last_name', 'phoneNumber', 'OfficeAddress']):
+        return jsonify({"error": "Missing data for one or more fields."}), HTTP_BAD_REQUEST
+
+    IdCert = ut.generate_random_number()
+
+    query = "INSERT INTO Doctors (IdCert, name, last_name, phoneNumber, OfficeAddress) VALUES (:IdCert, :name, :last_name, :phoneNumber, :OfficeAddress)"
+
+
+    try:
+        cursor.execute(query, [IdCert, data['name'], data['last_name'], data['phoneNumber'], data['OfficeAddress']])
+        connection.commit()
+        return jsonify({"success": "Doctor added successfully."}), HTTP_OK
+
+    except Exception as e:
+        connection.rollback()
+        return jsonify({"error": str(e)}), HTTP_INTERNAL_SERVER_ERROR
