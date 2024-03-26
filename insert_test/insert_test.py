@@ -71,11 +71,17 @@ for i in range(5):
     prescription_id = prescription_ids[i]
     insert_statements.append(prescription_insert.format(prescription_id, doctor_id, patient_ids[i]))
 
-    # Generar y añadir statement para detalle de prescripción
-    detail_id = generate_random_number()
-    # 3 means every 8 hours
-    # 2 means every 12 hours
-    times_per_day = 3 if i == 0 else 3 if i == 1 else 2 if i == 2 else 2 if i == 3 else 3
-    dose = 1 if i == 0 or i == 2 else 2
-    insert_statements.append(prescription_detail_insert.format(detail_id, prescription_id, medication_ids[i], times_per_day, dose))
+    for j in range(3):
+        # Generar y añadir statement para detalle de prescripción
+        detail_id = generate_random_number()
+        medIndex = i * 3 + j
+        if medIndex < len(medication_ids):
+            # 3 means every 8 hours
+            # 2 means every 12 hours
+            #times_per_day = 3 if i == 0 else 3 if i == 1 else 2 if i == 2 else 2 if i == 3 else 3
+            #dose = 1 if i == 0 or i == 2 else 2
+            medication_id = medication_ids[medIndex]
+            times_per_day = 3 if j % 2 == 0 else 2
+            dose = 1 if j % 2 == 0 else 2
+            insert_statements.append(prescription_detail_insert.format(detail_id, prescription_id, medication_id, times_per_day, dose))
 

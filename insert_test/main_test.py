@@ -65,12 +65,12 @@ table_names = ['Prescription_Details', 'Medicine', 'Prescription', 'Doctors', 'P
 #    print(table)
 #    cursor.execute(f'DROP TABLE {table} CASCADE CONSTRAINTS')
 
-for statement in tables:
-    cursor.execute(statement)
+#for statement in tables:
+#    cursor.execute(statement)
 
-for i in insert_statements:
-     cursor.execute(i)
-     connection.commit()
+#for i in insert_statements:
+#     cursor.execute(i)
+#     connection.commit()
 
 #for i in table_names:
 #    print(i)
