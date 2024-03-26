@@ -14,14 +14,18 @@ def prescriptionsDetails_detail():
     return 'Detalles de prescriptions', HTTP_OK
 
 #GET ALL
-@prescriptionDetails_blueprint.route('/<int:id_prescription>')
-def prescriptionsDetails_get_all(id_prescription):
-    parameters = {}
-    where_clauses = []
+@prescriptionDetails_blueprint.route('/prescriptions')
+def prescriptionsDetails_get_all():
+    #parameters = {}
+    #where_clauses = []
+    id_prescription = request.args.get('id_prescription', type=int)
 
-    if id_prescription:
-        where_clauses.append("Prescription.ID_Prescription = :id_prescription")
-        parameters['id_prescription'] = id_prescription
+    if not id_prescription:
+        return jsonify({"error": "Prescription ID is required bozo."}), HTTP_IM_A_TEAPOT
+
+    #if id_prescription:
+    #    where_clauses.append("Prescription.ID_Prescription = :id_prescription")
+    #    parameters['id_prescription'] = id_prescription
 
     query = """
         SELECT
@@ -33,17 +37,19 @@ def prescriptionsDetails_get_all(id_prescription):
             Prescription on PD.ID_Prescription = Prescription.ID_Prescription
         INNER JOIN
             Medicine M on PD.ID_Medication = M.ID_Medication
+        WHERE Prescription.ID_Prescription = :id_prescription
     """
 
-    if not where_clauses:
-        return jsonify({"error": "No results found."}), HTTP_NOT_FOUND
-    query += " WHERE " + " AND ".join(where_clauses)
+    #if not where_clauses:
+    #    return jsonify({"error": "No results found."}), HTTP_NOT_FOUND
+    #query += " WHERE " + " AND ".join(where_clauses)
 
-    cursor.execute(query, parameters)
+    #cursor.execute(query, parameters)
+    cursor.execute(query, [id_prescription])
     result = cursor.fetchall()
 
     if not result:
-        return jsonify({"error": "No results found."}), HTTP_NOT_FOUND
+        return jsonify({"error": "No prescription found bucko."}), HTTP_NOT_FOUND
 
     prescriptionDetails_list = ut.get_dictionary_from_query(result, cursor)
 
