@@ -45,7 +45,7 @@ def addPrescription():
 
 if __name__ == '__main__':
     #Uncomment for local use
-    app.run(port=7070)
+    # app.run(port=7070)
     index()
     #from waitress import serve
     #serve(app, host="0.0.0.0", port=8080)
