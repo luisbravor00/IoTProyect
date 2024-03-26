@@ -69,7 +69,7 @@ for i, medication_id in enumerate(medication_ids):
 # Añadir statements para prescripciones y detalles de prescripciones
 for i in range(5):
     prescription_id = prescription_ids[i]
-    insert_statements.append(prescription_insert.format(prescription_id, doctor_ids[i], patient_ids[i]))
+    insert_statements.append(prescription_insert.format(prescription_id, doctor_id, patient_ids[i]))
 
     # Generar y añadir statement para detalle de prescripción
     detail_id = generate_random_number()

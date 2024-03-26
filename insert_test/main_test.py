@@ -54,7 +54,6 @@ medicine = """CREATE TABLE Medicine (
 prescription_details = """CREATE TABLE Prescription_Details (
     ID_Detail NUMBER(8) PRIMARY KEY,
     ID_Prescription NUMBER(8) REFERENCES Prescription(ID_Prescription),
-    ID_DOCTOR NUMBER(8) REFERENCES Doctors(ID_Doctor),
     ID_Medication NUMBER(8) REFERENCES Medicine(ID_Medication),
     TIMES_PER_DAY NUMBER(1) NOT NULL,
     DOSE NUMBER(1) NOT NULL
@@ -66,12 +65,12 @@ table_names = ['Prescription_Details', 'Medicine', 'Prescription', 'Doctors', 'P
 #    print(table)
 #    cursor.execute(f'DROP TABLE {table} CASCADE CONSTRAINTS')
 
-#for statement in tables:
-#    cursor.execute(statement)
+for statement in tables:
+    cursor.execute(statement)
 
-#for i in insert_statements:
-#     cursor.execute(i)
-#     connection.commit()
+for i in insert_statements:
+     cursor.execute(i)
+     connection.commit()
 
 #for i in table_names:
 #    print(i)
