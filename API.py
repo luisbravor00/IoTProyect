@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from routes.prescriptions_route import prescriptions_blueprint
 from routes.patients_route import patients_blueprint
 from routes.doctors_route import doctors_blueprint
@@ -13,7 +13,7 @@ app.register_blueprint(medicine_blueprint, url_prefix='/medicine')
 
 @app.route("/")
 def index():
-    return "<h1>Hello!</h1>"
+    return render_template('index.html')
 
 if __name__ == '__main__':
     #Uncomment for local use
