@@ -11,3 +11,4 @@ class Prescription(db.Model):
     docterId = db.Column(db.ForeignKey('doctors.certId'))
     patientId = db.Column(db.ForeignKey('patient.patientId'))
     Date = db.Column(db.Date)
+

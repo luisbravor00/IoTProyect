@@ -8,7 +8,7 @@ db = SQLAlchemy(app)
 class prescription_details(db.Model):
     __tablename__ = 'prescription_details'
     pDetails = db.Column(db.Integer, primary_key=True)
-    prescription = db.Column(db.Integer)
-    medicine = db.Column(db.Integer)
-    dose = db.Column(db.String(50))
-    frequency = db.Column(db.String(40))
+    prescription = db.Column(db.ForeignKey('prescription.prescriptionId'))
+    medicine = db.Column(db.ForeignKey('medicine.medicineId'))
+    TimesPerDay = db.Column(db.Integer)
+    Dose = db.Column(db.Integer)
