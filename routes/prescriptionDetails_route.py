@@ -45,7 +45,7 @@ def prescriptionsDetails_get_all(id_prescription):
     if not result:
         return jsonify({"error": "No results found."}), HTTP_NOT_FOUND
 
-    #prescriptionDetails_list = ut.get_dictionary_from_query(result, cursor)
+    prescriptionDetails_list = ut.get_dictionary_from_query(result, cursor)
 
     #prescriptionDetails_list = [
     #    {
