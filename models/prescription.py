@@ -10,7 +10,5 @@ class Prescription(db.Model):
     prescriptionId = db.Column(db.Integer, primary_key=True)
     docterId = db.Column(db.ForeignKey('doctors.certId'))
     patientId = db.Column(db.ForeignKey('patient.patientId'))
-    medicineId = db.relationship('medicine', backref='prescription')
-    TimesPerDay = db.Column(db.Integer)
     Date = db.Column(db.Date)
 

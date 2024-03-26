@@ -36,8 +36,8 @@ def prescriptions_get_all():
                     Prescription.Date_prescribed,
                     Medicine.Name AS Medication_Name,
                     Medicine.Active_Ingredient AS Medication_Active_Ingredient,
-                    Prescription_Details.Dose,
-                    Prescription_Details.Frequency
+                    Prescription_Details.DOSE,
+                    Prescription_Details.TIMES_PER_DAY
                 FROM
                     Prescription
                 INNER JOIN
@@ -89,8 +89,8 @@ def prescriptions_get_prescription_by_id():
                     Prescription.Date_prescribed,
                     Medicine.Name AS Medication_Name,
                     Medicine.ActiveIngredient AS Medication_Active_Ingredient,
-                    Prescription_Details.Dose,
-                    Prescription_Details.Frequency
+                    Prescription_Details.DOSE,
+                    Prescription_Details.TIMES_PER_DAY
                 FROM
                     Prescription
                 INNER JOIN

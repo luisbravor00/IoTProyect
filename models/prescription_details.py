@@ -10,5 +10,5 @@ class prescription_details(db.Model):
     pDetails = db.Column(db.Integer, primary_key=True)
     prescription = db.Column(db.ForeignKey('prescription.prescriptionId'))
     medicine = db.Column(db.ForeignKey('medicine.medicineId'))
-    dose = db.Column(db.String(50))
-    frequency = db.Column(db.String(40))
+    TimesPerDay = db.Column(db.Integer)
+    Dose = db.Column(db.Integer)

@@ -9,6 +9,7 @@ patient_ids = [generate_random_number() for _ in range(5)]
 doctor_ids = [generate_random_number() for _ in range(5)]
 medication_ids = [generate_random_number() for _ in range(5)]
 prescription_ids = [generate_random_number() for _ in range(5)]
+prescriptionDetails_ids = [generate_random_number() for _ in range(5)]
 
 # Datos ficticios para pacientes, doctores y medicinas
 patients = [
@@ -28,19 +29,27 @@ doctors = [
 ]
 
 medicines = [
-    ('Azitrocin', 'Azitromicina', 'Pill'), 
-    ('Lipitor', 'Atorvastatina', 'Capsule'),
-    ('Zestril', 'Lisinopril', 'Pill'),
-    ('Glucophage', 'Metformina', 'Tablet'),
-    ('Amoxil', 'Amoxicilina', 'Capsule')
+    ('Azitrocin', 'Azitromicina', 1),
+    ('Lipitor', 'Atorvastatina', 2),
+    ('Zestril', 'Lisinopril', 1),
+    ('Glucophage', 'Metformina', 2),
+    ('Amoxil', 'Amoxicilina', 1)
 ]
+
+prescriptionDetails = [
+    (3, 1),
+    (3, 2),
+    (2, 1),
+    (2, 2)
+]
+
 
 # Templates para los INSERT statements
 patient_insert = "INSERT INTO Patients (ID_Patient, Name, Last_name, Address, Age, Phone, Email) VALUES ({}, '{}', '{}', '{}', {}, '{}', '{}')"
 doctor_insert = "INSERT INTO Doctors (ID_Doctor, Name, Last_name, Phone_num, Office_add) VALUES ({}, '{}', '{}', '{}', '{}')"
 medicine_insert = "INSERT INTO Medicine (ID_Medication, Name, Active_Ingredient, Dosage_Form) VALUES ({}, '{}', '{}', '{}')"
 prescription_insert = "INSERT INTO Prescription (ID_Prescription, ID_Doctor, ID_Patient, Date_prescribed) VALUES ({}, {}, {}, TO_DATE('2024-03-07', 'YYYY-MM-DD'))"
-prescription_detail_insert = "INSERT INTO Prescription_Details (ID_Detail, ID_Prescription, ID_Medication, Dose, Frequency) VALUES ({}, {}, {}, '{}', '{}')"
+prescription_detail_insert = "INSERT INTO Prescription_Details (ID_Detail, ID_Prescription, ID_Medication, Times_Per_Day, Dose) VALUES ({}, {}, {}, '{}', '{}')"
 
 # Generar los INSERT statements
 insert_statements = []
@@ -61,9 +70,12 @@ for i, medication_id in enumerate(medication_ids):
 for i in range(5):
     prescription_id = prescription_ids[i]
     insert_statements.append(prescription_insert.format(prescription_id, doctor_ids[i], patient_ids[i]))
-    
+
     # Generar y añadir statement para detalle de prescripción
     detail_id = generate_random_number()
-    dose = '1 pill' if i == 0 else '2 capsules' if i == 1 else '1 tablet' if i == 2 else '20ml' if i == 3 else '1 injection'
-    frequency = 'Twice a day' if i == 0 else 'Once a day' if i == 1 else 'Three times a day' if i == 2 else 'Four times a day' if i == 3 else 'Once a week'
-    insert_statements.append(prescription_detail_insert.format(detail_id, prescription_id, medication_ids[i], dose, frequency))
+    # 3 means every 8 hours
+    # 2 means every 12 hours
+    times_per_day = 3 if i == 0 else 3 if i == 1 else 2 if i == 2 else 2 if i == 3 else 3
+    dose = 1 if i == 0 or i == 2 else 2
+    insert_statements.append(prescription_detail_insert.format(detail_id, prescription_id, medication_ids[i], times_per_day, dose))
+

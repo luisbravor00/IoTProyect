@@ -10,7 +10,6 @@ class Medicine(db.Model):
     medicineId = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60))
     active_ingredient = db.Column(db.String(50))
-    dosage_form = db.Column(db.String(30))
-    prescriptionDetails = db.relationship('prescriptionDetails', backref='medicine')
+    dosage_form = db.Column(db.Integer)
 
 
