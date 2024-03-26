@@ -35,6 +35,7 @@ def prescriptions_get_all():
                     Prescription.ID_Prescription,
                     Prescription.Date_prescribed,
                     Medicine.Name AS Medication_Name,
+                    Medicine.Active_Ingredient AS Medication_Active_Ingredient,
                     Prescription_Details.Dose,
                     Prescription_Details.Frequency
                 FROM
@@ -69,7 +70,7 @@ def prescriptions_get_prescription_by_id():
     if id_doctor:
         where_clauses.append("Doctors.ID_Doctor = :id_doctor")
         parameters['id_doctor'] = id_doctor
-    
+
     id_prescription = request.args.get('id_prescription', type=int)
     if id_prescription:
         where_clauses.append("Prescription.ID_Prescription = :id_prescription")
@@ -87,6 +88,7 @@ def prescriptions_get_prescription_by_id():
                     Prescription.ID_Prescription,
                     Prescription.Date_prescribed,
                     Medicine.Name AS Medication_Name,
+                    Medicine.ActiveIngredient AS Medication_Active_Ingredient,
                     Prescription_Details.Dose,
                     Prescription_Details.Frequency
                 FROM
@@ -103,12 +105,12 @@ def prescriptions_get_prescription_by_id():
 
     if not where_clauses:
         return jsonify({"error": "No results found."}), HTTP_NOT_FOUND
-    
+
     query += " WHERE " + " AND ".join(where_clauses)
 
     cursor.execute(query, parameters)
     result = cursor.fetchall()
-    
+
     if not result:
         return jsonify({"error": "No results found."}), HTTP_NOT_FOUND
 
@@ -121,15 +123,15 @@ def prescriptions_get_prescription_by_id():
 def prescription_post_prescription():
     data = request.json
 
-    if not all(key in data for key in ['prescriptionId', 'doctorId', 'patientId', 'date']):
+    if not all(key in data for key in ['prescriptionId', 'doctorId', 'patientId', 'medicineId', 'TimesPerDay', 'date']):
         return jsonify({"error": "Missing data from one or more fields"}), HTTP_BAD_REQUEST
 
     prescriptionID = ut.generate_random_number()
 
-    query = "INSERT INTO Prescription (prescriptionId, doctorId, patientId, date) VALUES (:prescriptionId, :doctorId, :patientId, :date)"
+    query = "INSERT INTO Prescription (prescriptionId, doctorId, patientId, medicineId, TimesPerDay date) VALUES (:prescriptionId, :doctorId, :patientId, :medicineId, :TimesPerDay, :date)"
 
     try:
-        cursor.execute(query, [prescriptionID, data['prescriptionId'], data['doctorId'], data['patientId'], data['date']])
+        cursor.execute(query, [prescriptionID, data['prescriptionId'], data['doctorId'], data['patientId'], data['medicineId'], data['TimesPerDay'], data['date']])
         connection.commit()
         return jsonify({"success": "Prescription added successfully"}), HTTP_OK
 
