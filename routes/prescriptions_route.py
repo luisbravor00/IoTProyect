@@ -22,28 +22,12 @@ def prescriptions_detail():
 @prescriptions_blueprint.route('/data')
 def prescriptions_get_all():
     query = """ SELECT
-                    Patients.Name AS Patient_Name,
-                    Patients.Last_name AS Patient_Last_name,
-                    Patients.Address AS Patient_Address,
-                    Patients.Age AS Patient_Age,
-                    Patients.Phone AS Patient_Phone,
-                    Patients.Email AS Patient_Email,
-                    Doctors.Name AS Doctor_Name,
-                    Doctors.Last_name AS Doctor_Last_name,
-                    Doctors.Phone_num AS Doctor_Phone,
-                    Doctors.Office_add AS Doctor_Address,
-                    Prescription.ID_Prescription,
-                    Prescription.Date_prescribed,
-                    Medicine.Name AS Medication_Name,
+                    Prescription.ID_Prescription, 
                     Medicine.Active_Ingredient AS Medication_Active_Ingredient,
                     Prescription_Details.DOSE,
                     Prescription_Details.TIMES_PER_DAY
                 FROM
                     Prescription
-                INNER JOIN
-                    Patients ON Prescription.ID_Patient = Patients.ID_Patient
-                INNER JOIN
-                    Doctors ON Prescription.ID_Doctor = Doctors.ID_Doctor
                 INNER JOIN
                     Prescription_Details ON Prescription.ID_Prescription = Prescription_Details.ID_Prescription
                 INNER JOIN
@@ -56,47 +40,34 @@ def prescriptions_get_all():
 
     return jsonify(prescriptions_list), HTTP_OK
 
-@prescriptions_blueprint.route('/prescription')
-def prescriptions_get_prescription_by_id():
+@prescriptions_blueprint.route('/<int:id_prescription>')
+def prescriptions_get_prescription_by_id(id_prescription):
     parameters = {}
     where_clauses = []
 
-    id_patient = request.args.get('id_patient', type=int)
-    if id_patient:
-        where_clauses.append("Patients.ID_Patient = :id_patient")
-        parameters['id_patient'] = id_patient
+    #id_patient = request.args.get('id_patient', type=int)
+    #if id_patient:
+    #    where_clauses.append("Patients.ID_Patient = :id_patient")
+    #    parameters['id_patient'] = id_patient
 
-    id_doctor = request.args.get('id_doctor', type=int)
-    if id_doctor:
-        where_clauses.append("Doctors.ID_Doctor = :id_doctor")
-        parameters['id_doctor'] = id_doctor
+    #id_doctor = request.args.get('id_doctor', type=int)
+    #if id_doctor:
+    #    where_clauses.append("Doctors.ID_Doctor = :id_doctor")
+    #    parameters['id_doctor'] = id_doctor
 
-    id_prescription = request.args.get('id_prescription', type=int)
+    #id_prescription = request.args.get('id_prescription', type=int)
+    print(id_prescription)
+
     if id_prescription:
         where_clauses.append("Prescription.ID_Prescription = :id_prescription")
         parameters['id_prescription'] = id_prescription
 
-    query = """ SELECT
-                    Patients.Name || ' ' || Patients.Last_name AS "PATIENT_NAME",
-                    Patients.Address AS Patient_Address,
-                    Patients.Age AS Patient_Age,
-                    Patients.Phone AS Patient_Phone,
-                    Patients.Email AS Patient_Email,
-                    Doctors.Name || ' ' || Doctors.Last_name AS "DOCTOR_NAME",
-                    Doctors.Phone_num AS Doctor_Phone,
-                    Doctors.Office_add AS Doctor_Address,
-                    Prescription.ID_Prescription,
-                    Prescription.Date_prescribed,
-                    Medicine.Name AS Medication_Name,
-                    Medicine.ActiveIngredient AS Medication_Active_Ingredient,
+    query = """ SELECT      
+                    Medicine.Active_Ingredient AS Medication_Active_Ingredient,
                     Prescription_Details.DOSE,
                     Prescription_Details.TIMES_PER_DAY
                 FROM
                     Prescription
-                INNER JOIN
-                    Patients ON Prescription.ID_Patient = Patients.ID_Patient
-                INNER JOIN
-                    Doctors ON Prescription.ID_Doctor = Doctors.ID_Doctor
                 INNER JOIN
                     Prescription_Details ON Prescription.ID_Prescription = Prescription_Details.ID_Prescription
                 INNER JOIN
