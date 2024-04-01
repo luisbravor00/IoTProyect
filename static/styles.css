@@ -34,7 +34,7 @@ body {
 }
 
 .sidebar a:hover {
-  background-color: white;
+  background-color: gray;
 }
 
 .content {
