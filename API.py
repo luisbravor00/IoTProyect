@@ -1,6 +1,25 @@
 from flask import Flask, render_template, request, redirect, flash
 from models import *
+import os
+from dotenv import load_dotenv
 import oracledb
+
+load_dotenv()
+dbuser = os.getenv('DATABASE_USER')
+dbpswd = os.getenv('DATABASE_PSWD')
+dbdir = os.getenv('DIR_LOCATION')
+##CHANGE DEPENDING ON YOUR .ENV FILE!!!
+cs = os.getenv('DNS')
+
+
+
+print(dbdir)
+
+connection = oracledb.connect(config_dir = dbdir,  user= dbuser,
+                              password=dbpswd, dsn=cs,
+                              wallet_location = dbdir, wallet_password=dbpswd)
+
+cursor = connection.cursor()
 
 from routes.prescriptionDetails_route import prescriptionDetails_blueprint
 from routes.prescriptions_route import prescriptions_blueprint
@@ -35,9 +54,10 @@ def addPrescription():
             flash("Please enter a valid patient, doctor or medicine ID please", "Error")
             return redirect("prescription/add")
 
+        ##NOT COMPLETE
         newPrescription = prescriptions_blueprint(patientId=patientId, doctorId=doctorId, medicineId=medicineId, Times_Per_day=Times_Per_day, Dose=Dose)
-        oracledb.add(newPrescription)
-        oracledb.commit()
+        cursor.execute(newPrescription)
+        connection.commit()
 
         flash("Prescription added successfully!", "success")
         return redirect("/prescriptions")
