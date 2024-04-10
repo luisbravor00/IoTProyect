@@ -2,11 +2,10 @@ $(document).ready(function () {
 
     let navbar = `
                 <a href="./patients.html">Inicio</a>
-                <a href="./patients.html">Patients</a>
                 <a href="./doctors.html">Doctors</a>
-                <a href="./login.html">Log in</a>
+                <a href="./login.html">Iniciar sesión</a>
                 `;
-    $('.navbar').append(navbar);
+    $('.navbar').append(navbar).css('justify-content', 'space-evenly');
 
     let footer = `
                 <p>CareMinder S.A de C.V</p>
