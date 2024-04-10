@@ -27,11 +27,12 @@ a{
 
 .navbar {
   width: 100%;
-  padding: 20px;
+  padding: 20px 0;
   background-color: white;
   display: flex;
-  flex-direction: row;
+  justify-content: space-evenly;
 }
+
 hr{
   color: #000;
   background-color: #fff;
@@ -95,18 +96,22 @@ input{
 }
 
 form{
-  width: 100%;
+  width: 75%;
+  padding-bottom: 10px;
 }
 
 footer{
   background-color: #000;
   width: 100%;
-  height: 100px;
   color:#fff;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  height: 81px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 
 .icons{

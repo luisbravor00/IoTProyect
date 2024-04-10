@@ -18,7 +18,7 @@ app.register_blueprint(medicine_blueprint, url_prefix='/medicine')
 
 @app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template('login.html')
 
 ##Ignore for now, will be used onced front is integrated. This is only the initial structure.
 @app.route("/prescriptions/add", methods=["POST"])
