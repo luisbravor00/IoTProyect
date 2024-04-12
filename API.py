@@ -39,6 +39,15 @@ app.register_blueprint(medicine_blueprint, url_prefix='/medicine')
 def index():
     return render_template('login.html')
 
+@app.route("/templates/patients.html")
+def patients():
+    return render_template('patients.html')
+
+@app.route("/templates/ourDoctor.html")
+def doctors():
+    return render_template('ourDoctor.html')
+
+
 ##Ignore for now, will be used onced front is integrated. This is only the initial structure.
 @app.route("/prescriptions/add", methods=["POST"])
 def addPrescription():
@@ -68,7 +77,7 @@ def addPrescription():
 
 if __name__ == '__main__':
     #Uncomment for local use
-    app.run(port=7070)
+    #app.run(port=7070)
     index()
     #from waitress import serve
     #serve(app, host="0.0.0.0", port=8080)

@@ -1,12 +1,24 @@
 $(document).ready(function () {
 
-    let navbar = `
-                <a href="./patients.html">Inicio</a>
-                <a href="./doctors.html">Doctors</a>
-                <a href="./login.html">Iniciar sesión</a>
-                `;
-    $('.navbar').append(navbar).css('justify-content', 'space-evenly');
+  const patientsUrl = "/templates/patients.html";
+  const ourDoctorUrl = "/templates/ourDoctor.html";
+  const loginUrl = "/";
 
+  const navbar = `
+      <a class="patient" href="${patientsUrl}">Inicio</a>
+      <a class="doctor" href="${ourDoctorUrl}">Doctors</a>
+      <a class="login" href="${loginUrl}">Iniciar sesión</a>
+    `;
+    const compiledNavbar = Handlebars.compile(navbar);
+    const html = compiledNavbar();
+
+    $('.navbar').append(html);
+    
+$('.navbar a').on('click', function(e) {
+  e.preventDefault();
+  var href = $(this).attr('href');
+  window.location.href = href;
+})
     let footer = `
                 <p>CareMinder S.A de C.V</p>
                 <div class="icons">
@@ -20,3 +32,4 @@ $(document).ready(function () {
                 `;
     $('footer').append(footer);
 });
+
