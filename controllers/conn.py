@@ -7,7 +7,7 @@ dbuser = os.getenv('DATABASE_USER')
 dbpswd = os.getenv('DATABASE_PSWD')
 dbdir = os.getenv('DIR_LOCATION')
 ## CHANGE ACORDING TO YOUR .ENV
-cs = os.getenv('DNS')
+cs = os.getenv('CONN')
 
 connection = oracledb.connect(config_dir = dbdir,  user= dbuser, 
                               password=dbpswd, dsn=cs, 

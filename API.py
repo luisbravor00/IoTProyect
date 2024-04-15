@@ -1,31 +1,11 @@
 from flask import Flask, render_template, request, redirect, flash
 from models import *
-import os
-from dotenv import load_dotenv
-import oracledb
-
-load_dotenv()
-dbuser = os.getenv('DATABASE_USER')
-dbpswd = os.getenv('DATABASE_PSWD')
-dbdir = os.getenv('DIR_LOCATION')
-##CHANGE DEPENDING ON YOUR .ENV FILE!!!
-cs = os.getenv('DNS')
-
-
-
-print(dbdir)
-
-connection = oracledb.connect(config_dir = dbdir,  user= dbuser,
-                              password=dbpswd, dsn=cs,
-                              wallet_location = dbdir, wallet_password=dbpswd)
-
-cursor = connection.cursor()
-
 from routes.prescriptionDetails_route import prescriptionDetails_blueprint
 from routes.prescriptions_route import prescriptions_blueprint
 from routes.patients_route import patients_blueprint
 from routes.doctors_route import doctors_blueprint
 from routes.medicine_route import medicine_blueprint
+from controllers.conn import connection, cursor
 
 app = Flask(__name__)
 
@@ -77,7 +57,7 @@ def addPrescription():
 
 if __name__ == '__main__':
     #Uncomment for local use
-    #app.run(port=7070)
+    app.run(port=7070)
     index()
-    #from waitress import serve
-    #serve(app, host="0.0.0.0", port=8080)
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=8080)
