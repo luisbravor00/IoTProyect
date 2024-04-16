@@ -9,14 +9,51 @@ from controllers.conn import connection, cursor
 
 app = Flask(__name__)
 
+###
+app.secret_key = b'hfsdoahifhaosdhf'
+
 app.register_blueprint(prescriptionDetails_blueprint, url_prefix='/prescriptionDetails')
 app.register_blueprint(prescriptions_blueprint, url_prefix='/prescriptions')
 app.register_blueprint(patients_blueprint, url_prefix='/patients')
 app.register_blueprint(doctors_blueprint, url_prefix='/doctors')
 app.register_blueprint(medicine_blueprint, url_prefix='/medicine')
 
-@app.route("/")
+
+
+
+###Authentication for user
+def authenticate_user(id):
+   ##check to see if the user is a doctor or patient
+    doctorQuery = "SELECT * FROM Doctors WHERE ID_DOCTOR = :1"
+    cursor.execute(doctorQuery,(id,))
+    doctor = cursor.fetchone()
+
+    patientQuery = "SELECT * FROM Patients WHERE ID_PATIENT = :1"
+    cursor.execute(patientQuery, (id,))
+    patient = cursor.fetchone()
+
+    if doctor:
+        return 'doctor'
+    elif patient:
+        return 'patient'
+    else:
+        return 0
+    
+
+
+@app.route("/", methods=["POST", "GET"])
 def index():
+    if request.method == "POST":
+        id = request.form.get("id")
+        role = authenticate_user(id)
+
+        if role == 'doctor':
+            return redirect("/doctor_dashboard")
+        elif role == 'patient':
+            return redirect("/patient_dashboard")
+        else:
+            flash(f"Error ocurred, please try again.")
+
     return render_template('login.html')
 
 @app.route("/templates/patients.html")
