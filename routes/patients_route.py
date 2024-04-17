@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template, request, redirect, flash
 from datetime import datetime
 from config.config import *
 from controllers.conn import connection, cursor
@@ -11,7 +11,7 @@ patients_blueprint = Blueprint('patients', __name__)
 ## GET Ruta Base
 @patients_blueprint.route('/')
 def patients_home():
-    return 'Página de patients', HTTP_OK
+    return render_template('patients.html'), HTTP_OK
 
 ## GET Ruta Base
 @patients_blueprint.route('/details')

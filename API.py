@@ -6,6 +6,7 @@ from routes.patients_route import patients_blueprint
 from routes.doctors_route import doctors_blueprint
 from routes.medicine_route import medicine_blueprint
 from controllers.conn import connection, cursor
+from config.config import *
 
 app = Flask(__name__)
 
@@ -42,7 +43,11 @@ def authenticate_user(id):
 
 @app.route("/")
 def index():
-    return redirect("/login")
+    return render_template('index.html'), HTTP_OK
+
+@app.route("/about")
+def doctors():
+    return render_template('our_doctors.html')
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
@@ -59,13 +64,6 @@ def login():
 
     return render_template('login.html')
 
-@app.route("/templates/patients.html")
-def patients():
-    return render_template('patients.html')
-
-@app.route("/templates/ourDoctor.html")
-def doctors():
-    return render_template('ourDoctor.html')
 
 @app.route("/templates/doctorInterface")
 def doctorInterface():
