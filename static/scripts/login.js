@@ -2,16 +2,18 @@ $(document).ready(() => {
     $('#login-form').submit((e) => {
         e.preventDefault();
 
-        const formData = $('#login-form').serialize();
-        
-
+        // const formData = $('#user-id').val();
+        const formData = {"user":$('#user-id').val()};
+        const serializedData = $.param(formData);
+        console.log(formData);
         $.ajax({
-            type: 'POST',
+            type: 'GET',
             url: '/login',
             contentType: 'application/json',
             data: formData,
             success: function(response) {
-                window.location.href = '/login.html';
+                console.log(response);
+                // window.location.href = '/login.html';
             },
             error: (err) => {
                 try {

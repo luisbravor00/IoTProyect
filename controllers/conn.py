@@ -9,6 +9,7 @@ dbdir = os.getenv('DIR_LOCATION')
 ## CHANGE ACORDING TO YOUR .ENV
 cs = os.getenv('CONN_S')
 
+
 connection = oracledb.connect(config_dir = dbdir,  user= dbuser, 
                               password=dbpswd, dsn=cs, 
                               wallet_location = dbdir, wallet_password=dbpswd)

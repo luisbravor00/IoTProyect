@@ -51,16 +51,19 @@ def doctors():
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
-    if request.method == "POST":
-        id = request.form.get("id")
-        role = authenticate_user(id)
-
-        if role == 'doctor':
-            return redirect("/doctorInterface")
-        elif role == 'patient':
-            return redirect("/patient_dashboard")
-        else:
-            flash(f"Error ocurred, please try again.")
+    
+    print('se ha llamado este endpoint')
+    id = request.args.get('user')
+    print("id ingresado", id)
+    
+    role = authenticate_user(id)
+    print("rol del id ", role)
+    if role == 'doctor':
+        return render_template("doctorInterface.html")
+    elif role == 'patient':
+        return redirect("/patient_dashboard")
+    else:
+        flash(f"Error ocurred, please try again.")
 
     return render_template('login.html')
 
