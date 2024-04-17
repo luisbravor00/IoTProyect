@@ -7,7 +7,7 @@ $(document).ready(() => {
 
         $.ajax({
             type: 'POST',
-            url: '/',
+            url: '/login',
             contentType: 'application/json',
             data: formData,
             success: function(response) {

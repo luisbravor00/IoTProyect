@@ -40,15 +40,18 @@ def authenticate_user(id):
         return 0
     
 
-
-@app.route("/", methods=["POST", "GET"])
+@app.route("/")
 def index():
+    return redirect("/login")
+
+@app.route("/login", methods=["POST", "GET"])
+def login():
     if request.method == "POST":
         id = request.form.get("id")
         role = authenticate_user(id)
 
         if role == 'doctor':
-            return redirect("/doctor_dashboard")
+            return redirect("/doctorInterface")
         elif role == 'patient':
             return redirect("/patient_dashboard")
         else:
@@ -63,6 +66,10 @@ def patients():
 @app.route("/templates/ourDoctor.html")
 def doctors():
     return render_template('ourDoctor.html')
+
+@app.route("/templates/doctorInterface")
+def doctorInterface():
+    return render_template('doctorInterface.html')
 
 
 ##Ignore for now, will be used onced front is integrated. This is only the initial structure.
@@ -96,5 +103,5 @@ if __name__ == '__main__':
     #Uncomment for local use
     app.run(port=7070)
     index()
-    from waitress import serve
-    serve(app, host="0.0.0.0", port=8080)
+    #from waitress import serve
+    #serve(app, host="0.0.0.0", port=8080)
