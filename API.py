@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, flash
+from flask import Flask, render_template, request, redirect, flash, url_for, jsonify
 from models import *
 from routes.prescriptionDetails_route import prescriptionDetails_blueprint
 from routes.prescriptions_route import prescriptions_blueprint
@@ -51,17 +51,19 @@ def doctors():
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
-    
-    print('se ha llamado este endpoint')
-    id = request.args.get('user')
-    print("id ingresado", id)
+    if request.method == "POST":
+        data = request.get_json()
+        id = data.get('user')
+    else:
+        id = request.args.get('user')
     
     role = authenticate_user(id)
-    print("rol del id ", role)
+    print(f"This user's role is: ", role)
+    print(f"Their id is: ", id)
     if role == 'doctor':
-        return render_template("doctorInterface.html")
+        return render_template('doctorInterface.html')
     elif role == 'patient':
-        return redirect("/patient_dashboard")
+        return render_template('patientInterface.html')
     else:
         flash(f"Error ocurred, please try again.")
 
