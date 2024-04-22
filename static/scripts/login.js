@@ -11,7 +11,8 @@ $(document).ready(() => {
             contentType: 'application/json',
             data: formData,
             success: function(response) {
-                $('body').html(response);
+                window.location.href = response.redirect;
+                //$('body').html(response);
             },
             error: (err) => {
                 try {
