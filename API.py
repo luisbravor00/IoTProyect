@@ -74,6 +74,24 @@ def login():
 def doctorInterface():
     return render_template('doctorInterface.html')
 
+#post contact form, i just don't want to make another file 
+@app.route('/contact', methods=['POST'])
+def post_contact_form():
+    data = request.json
+    if not all(key in data for key in['name', 'email', 'message']):
+        return jsonify({'error':'Missing data for one or more fields'}), HTTP_BAD_REQUEST
+    query = 'INSERT INTO contactUs (name, email, message) values(:name, :email, :message)'
+    
+    try:
+        cursor.execute(query, [ data['name'], data['email'], data['message']])
+
+        connection.commit()
+        return jsonify({"success": "Patient added successfully."}), HTTP_OK
+
+    except Exception as e:
+        connection.rollback()
+        return jsonify({"error": str(e)}), HTTP_INTERNAL_SERVER_ERROR
+    
 
 ##Ignore for now, will be used onced front is integrated. This is only the initial structure.
 @app.route("/prescriptions/add", methods=["POST"])

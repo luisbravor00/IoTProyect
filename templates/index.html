@@ -12,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="../static/scripts/navBar&footer.js"></script>
+    <script src="../static/scripts/form.js"></script>
 </head>
 <body>
 
@@ -47,22 +48,32 @@
 
         <div class="contact-us">
           <h3>Contáctanos</h3>
-        <form>
+        <form id="contact-form">
           <div class="form-group">
             <label for="clientName">Nombre</label>
-            <input type="password" class="form-control" id="clientName" placeholder="Nombre">
+            <input type="text" class="form-control" id="clientName" placeholder="Nombre">
           </div>
           <div class="form-group">
             <label for="emailField">Correo</label>
             <input type="email" class="form-control" id="emailField" aria-describedby="emailHelp" placeholder="Correo">
+            <div class="alert alert-danger visually-hidden alert-dismissible fade show" role="alert">
+              <p>Ingresa tu nombre</p>
+            </div>
           </div>
           <div class="form-group">
             <label for="messageField">Mensaje</label>
             <textarea class="form-control" id="messageField" rows="3"></textarea>
+            <div class="alert alert-danger visually-hidden alert-dismissible fade show" role="alert">
+              <p>Agrega un correo electronico por favor.</p>
+            </div>
           </div>
           <div class="form-check">
             <input type="checkbox" class="form-check-input pb-2 pt-2" id="checkTyC">
             <label class="form-check-label" for="checkTyC">Terminos y condiciones</label>
+            <div class="alert alert-danger visually-hidden alert-dismissible fade show" role="alert" id="TyC-Alert">
+              <p>Acepta terminos y condiciones para continuar</p>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
           </div>
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
