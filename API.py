@@ -25,21 +25,20 @@ app.register_blueprint(medicine_blueprint, url_prefix='/medicine')
 ###Authentication for user
 def authenticate_user(id):
    ##check to see if the user is a doctor or patient
-    doctorQuery = "SELECT * FROM Doctors WHERE ID_DOCTOR = :1"
+    doctorQuery = "SELECT name FROM Doctors WHERE ID_DOCTOR = :1"
     cursor.execute(doctorQuery,(id,))
     doctor = cursor.fetchone()
 
-    patientQuery = "SELECT * FROM Patients WHERE ID_PATIENT = :1"
+    patientQuery = "SELECT name FROM Patients WHERE ID_PATIENT = :1"
     cursor.execute(patientQuery, (id,))
     patient = cursor.fetchone()
 
     if doctor:
-        return 'doctor'
+        return 'doctor', doctor[0]
     elif patient:
-        return 'patient'
+        return 'patient', patient[0]
     else:
-        return 0
-    
+        return 0, 0  
 
 @app.route("/")
 def index():
@@ -57,22 +56,30 @@ def login():
     else:
         id = request.args.get('user')
     
-    role = authenticate_user(id)
-    print(f"This user's role is: ", role)
-    print(f"Their id is: ", id)
+    role, name = authenticate_user(id)
     if role == 'doctor':
-        return render_template('doctorInterface.html')
+        return jsonify({'redirect': url_for('doctor_interface', doctor_id=id)})
+        #doctor_name = name
+        #return render_template('doctorInterface.html', doctor_name = doctor_name)
     elif role == 'patient':
-        return render_template('patientInterface.html')
+        return jsonify({'redirect': url_for('patient_interface', patient_id=id)})
+        #patient_name = name
+        #return render_template('patientInterface.html', patient_name = patient_name)
     else:
         flash(f"Error ocurred, please try again.")
 
     return render_template('login.html')
 
+@app.route("/doctorInterface")
+def doctor_interface():
+    doctor_id = request.args.get('doctor_id')
+    doctor_name = authenticate_user(doctor_id)[1]
+    return render_template('doctorInterface.html', doctor_name=doctor_name, doctor_id=doctor_id)
 
-@app.route("/templates/doctorInterface")
-def doctorInterface():
-    return render_template('doctorInterface.html')
+@app.route("/patient_interface/<int:patient_id>")
+def patient_interface():
+    patient_name = authenticate_user(patient_id)[1]
+    return render_template('patientInterface.html', patient_name=patient_name, patient_id=patient_id)
 
 #post contact form, i just don't want to make another file 
 @app.route('/contact', methods=['POST'])
@@ -93,9 +100,43 @@ def post_contact_form():
         return jsonify({"error": str(e)}), HTTP_INTERNAL_SERVER_ERROR
     
 
+
+##fetching patients that belong to the doctor
+@app.route("/doctorInterface/<int:doctor_id>", methods=["GET"])
+def getPatients(doctor_id):
+    #data = request.get_json()
+    #doctor_id = data.get('user')
+
+    ##QUERY
+    fetchQuery = """SELECT PT.name, PT.last_name, PT.age, PT.phone
+                  FROM Prescription P
+                  LEFT JOIN Patients PT ON PT.ID_PATIENT = P.ID_PATIENT
+                  WHERE P.ID_DOCTOR = :doctor_id
+                  """
+    cursor.execute(fetchQuery, {'doctor_id': doctor_id})
+    patients = cursor.fetchall()
+    print(f"Query")
+    print(patients)
+
+    patientData = []
+    for patient in patients:
+        print(patient)
+        patient_info = {
+            'name': patient[0],
+            'last_name': patient[1],
+            'age': patient[2],
+            'phone': patient[3]
+        }
+        patientData.append(patient_info)
+    print(f"Patient Data")
+    print(patientData)
+
+    return jsonify(patientData)
+    
+
 ##Ignore for now, will be used onced front is integrated. This is only the initial structure.
-@app.route("/prescriptions/add", methods=["POST"])
-def addPrescription():
+@app.route("/doctorInterface/<int:doctor_id>", methods=["POST"])
+def addPrescription(doctor_id):
     try:
         patientId = request.form.get("patientId")
         doctorId = request.form.get("doctorId")
