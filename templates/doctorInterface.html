@@ -62,20 +62,20 @@
         <h2>Add New Patient</h2>
         <form id="patient-form">
             <label for="patient-name">Name: </label>
-            <input type="text" id="name" name="name">
+            <input type="text" id="name" name="name" required>
             <label for="patient-last_name">Last Name: </label>
-            <input type="text" id="last_name" name="last_name">
+            <input type="text" id="last_name" name="last_name" required>
             <label for="address">Address: </label>
-            <input type="text" id="address" name="address">
+            <input type="text" id="address" name="address" required>
             <label for="age">Age: </label>
-            <input type="number" id="age" name="age">
+            <input type="number" id="age" name="age" required>
             <br>
             <label for="phone">Phone: </label>
-            <input type="text" id="phone" name="phone">
+            <input type="text" id="phone" name="phone" required>
             <label for="email">Email: </label>
-            <input type="text" id="email" name="email">
+            <input type="text" id="email" name="email" required>
             <label for="date">Date:</label>
-            <input type="date" id="date" name="date">
+            <input type="date" id="date" name="date" required>
             <button type="submit" id="sumbit-patient"> Add Patient </button>
         </form>
     </div>
@@ -102,14 +102,14 @@
                 {% endfor %}
             </select>
             <label for="dosage_form">Dosage Form:</label>
-            <input type="text" id="dosage_form" name="dosage_form">
+            <input type="text" id="dosage_form" name="dosage_form" required>
             <label for="dose">Dose:</label>
-            <input type="text" id="dose" name="dose">
+            <input type="text" id="dose" name="dose" required>
             <br>
             <label for="TimesPerDay">Times Per Day:</label>
-            <input type="text" id="TimesPerDay" name="TimesPerDay">
+            <input type="text" id="TimesPerDay" name="TimesPerDay" required>
             <label for="date">Date:</label>
-            <input type="date" id="date" name="date">
+            <input type="date" id="date" name="date" required:>
             <button type="sumbit" id="submit-prescription"> Add Prescription </button>
         </form>
         <div id="prescription-response"></div>

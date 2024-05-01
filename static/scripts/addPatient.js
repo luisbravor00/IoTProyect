@@ -28,12 +28,11 @@ $(document).ready(() => {
                     contentType: 'application/json',
                     data: JSON.stringify(formData2),
                     success: function(response2) { 
-                        console.log('Patient added successfully');
-                        console.log(response2.success);
                         alert('Patient added successfully, please refresh page to view them.');
                     },
                     error: function(err) {
                         try {
+                            alert('Fill in all fields please');
                             const errorMessage = err.responseJSON.message;
                             const error = $('#error');
                             error.text(errorMessage);

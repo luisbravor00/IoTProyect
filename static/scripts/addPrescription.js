@@ -29,9 +29,7 @@ $(document).ready(() => {
                     contentType: 'application/json',
                     data: JSON.stringify(formData2),
                     success: function(response2) {
-                        console.log('Prescription added successfully');
-                        console.log(response2);
-                        alert(response2.success);
+                        alert(response2);
                     },
                     error: function(err) {
                         try {
@@ -47,6 +45,7 @@ $(document).ready(() => {
             },
             error: function(err) {
                 try {
+                    alert('Fill in all fields please');
                     const errorMessage = err.responseJSON.message;
                     const error = $('#error');
                     error.text(errorMessage);

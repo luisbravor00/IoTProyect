@@ -52,12 +52,13 @@ def doctors_get_doctor_by_id():
 @patients_blueprint.route('/add', methods=['POST'])
 def patient_post_patient():
     data = request.json
-    #"INSERT INTO Patients (ID_Patient, Name, Last_Name, Address, Age, Phone, Email)
 
     if not all(key in data for key in['Name', 'Last_Name', 'Address', 'Age', 'Phone', 'Email']):
         return jsonify({"error": "Missing data for one or more fields."}), HTTP_BAD_REQUEST
 
     print(f"Data reaches patient endpoint")
+
+    print(data)
 
     ID_Patient = ut.generate_random_number()
 
