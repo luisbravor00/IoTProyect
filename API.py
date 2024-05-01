@@ -1,4 +1,7 @@
 from flask import Flask, render_template, request, redirect, flash, url_for, jsonify
+from flask_cors import CORS
+import os 
+from dotenv import load_dotenv
 from models import *
 from routes.prescriptionDetails_route import prescriptionDetails_blueprint
 from routes.prescriptions_route import prescriptions_blueprint
@@ -6,12 +9,18 @@ from routes.patients_route import patients_blueprint
 from routes.doctors_route import doctors_blueprint
 from routes.medicine_route import medicine_blueprint
 from controllers.conn import connection, cursor
+from controllers import utilities as ut
 from config.config import *
 
+load_dotenv()
+
 app = Flask(__name__)
+CORS(app)
+
+app.config['APP_URL'] = os.getenv('APP_URL')
 
 ###
-app.secret_key = b'hfsdoahifhaosdhf'
+app.secret_key = os.getenv("APP_SECRET_KEY")
 
 app.register_blueprint(prescriptionDetails_blueprint, url_prefix='/prescriptionDetails')
 app.register_blueprint(prescriptions_blueprint, url_prefix='/prescriptions')
@@ -70,11 +79,34 @@ def login():
 
     return render_template('login.html')
 
-@app.route("/doctorInterface")
-def doctor_interface():
-    doctor_id = request.args.get('doctor_id')
+@app.route("/doctorInterface/<int:doctor_id>", methods=["GET", "POST"])
+def doctor_interface(doctor_id):
+    #doctor_id = request.args.get('doctor_id')
     doctor_name = authenticate_user(doctor_id)[1]
-    return render_template('doctorInterface.html', doctor_name=doctor_name, doctor_id=doctor_id)
+    #fetch the list of patients for the doctor
+    patients = getPatients(doctor_id)
+    #fetch medicine
+    fetchMedicineQuery = """ SELECT DISTINCT(name) as name, ID_MEDICATION, active_ingredient, dosage_form 
+                            FROM Medicine
+                        """
+    cursor.execute(fetchMedicineQuery)
+    medicines = cursor.fetchall()
+
+    medicineData = []
+    for medicine in medicines:
+        medicine_info = {
+            'name': medicine[0],
+            'medicineId': medicine[1],
+            'activeIngredient': medicine[2],
+            'Dosage': medicine[3]
+        }
+        medicineData.append(medicine_info)
+    #print(f"Medicine Data")
+    #print(medicineData)
+    #print("\n")
+    medicine=medicineData
+
+    return render_template('doctorInterface.html', doctor_name=doctor_name, doctor_id=doctor_id, patients=patients, medicines=medicine)
 
 @app.route("/patient_interface/<int:patient_id>")
 def patient_interface():
@@ -100,7 +132,6 @@ def post_contact_form():
         return jsonify({"error": str(e)}), HTTP_INTERNAL_SERVER_ERROR
     
 
-
 ##fetching patients that belong to the doctor
 @app.route("/doctorInterface/<int:doctor_id>", methods=["GET"])
 def getPatients(doctor_id):
@@ -108,11 +139,12 @@ def getPatients(doctor_id):
     #doctor_id = data.get('user')
 
     ##QUERY
-    fetchQuery = """SELECT PT.name, PT.last_name, PT.age, PT.phone
+    fetchQuery = """SELECT DISTINCT(PT.name), PT.ID_Patient, PT.last_name, PT.age, PT.phone
                   FROM Prescription P
                   LEFT JOIN Patients PT ON PT.ID_PATIENT = P.ID_PATIENT
                   WHERE P.ID_DOCTOR = :doctor_id
                   """
+
     cursor.execute(fetchQuery, {'doctor_id': doctor_id})
     patients = cursor.fetchall()
     print(f"Query")
@@ -122,43 +154,19 @@ def getPatients(doctor_id):
     for patient in patients:
         print(patient)
         patient_info = {
+            'patientId': patient[1],
             'name': patient[0],
-            'last_name': patient[1],
-            'age': patient[2],
-            'phone': patient[3]
+            'last_name': patient[2],
+            'age': patient[3],
+            'phone': patient[4]
         }
         patientData.append(patient_info)
     print(f"Patient Data")
     print(patientData)
+    print("\n")
 
-    return jsonify(patientData)
+    return patientData
     
-
-##Ignore for now, will be used onced front is integrated. This is only the initial structure.
-@app.route("/doctorInterface/<int:doctor_id>", methods=["POST"])
-def addPrescription(doctor_id):
-    try:
-        patientId = request.form.get("patientId")
-        doctorId = request.form.get("doctorId")
-        medicineId = request.form.get("medicineId")
-        Times_Per_day = request.form.get("timesPD")
-        Dose = request.form.get("dose")
-
-        if not patientId or not doctorId or not medicineId:
-            #flash is kinda like alert from js i guess
-            flash("Please enter a valid patient, doctor or medicine ID please", "Error")
-            return redirect("prescription/add")
-
-        ##NOT COMPLETE
-        newPrescription = prescriptions_blueprint(patientId=patientId, doctorId=doctorId, medicineId=medicineId, Times_Per_day=Times_Per_day, Dose=Dose)
-        cursor.execute(newPrescription)
-        connection.commit()
-
-        flash("Prescription added successfully!", "success")
-        return redirect("/prescriptions")
-    except Exception as e:
-        flash(f"An error ocurred: {str(e)}", "error")
-        return redirect("/prescription/add")
 
 
 if __name__ == '__main__':

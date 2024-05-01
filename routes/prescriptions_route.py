@@ -122,22 +122,29 @@ def prescriptions_get_prescription_by_id(id_prescription):
     return jsonify(prescriptions_list), HTTP_OK
 
 #Post Prescriptions
-@prescriptions_blueprint.route('/add', methods=['POSTS'])
+@prescriptions_blueprint.route('/add', methods=['POST'])
 def prescription_post_prescription():
     data = request.json
+    print(data)
+    print(f"Data is sent to this endpoint")
+    
 
-    if not all(key in data for key in ['prescriptionId', 'doctorId', 'patientId', 'medicineId', 'TimesPerDay', 'date']):
+    if not all(key in data for key in ['ID_Doctor', 'ID_Patient', 'Date_Prescribed']):
         return jsonify({"error": "Missing data from one or more fields"}), HTTP_BAD_REQUEST
+    ID_Prescription = ut.generate_random_number()
 
-    prescriptionID = ut.generate_random_number()
 
-    query = "INSERT INTO Prescription (prescriptionId, doctorId, patientId, medicineId, TimesPerDay date) VALUES (:prescriptionId, :doctorId, :patientId, :medicineId, :TimesPerDay, :date)"
+    query = "INSERT INTO Prescription (ID_Prescription, ID_Doctor, ID_Patient, Date_Prescribed) VALUES (:ID_Prescription, :ID_Doctor, :ID_Patient, TO_DATE(:Date_Prescribed, 'YYYY-MM-DD'))"
+
+
+    print(f"prescription route checkpoint before commit")
 
     try:
-        cursor.execute(query, [prescriptionID, data['prescriptionId'], data['doctorId'], data['patientId'], data['medicineId'], data['TimesPerDay'], data['date']])
+        print(f"Enters try ")
+        cursor.execute(query, [ID_Prescription, data['ID_Doctor'], data['ID_Patient'], data['Date_Prescribed']])
         connection.commit()
-        return jsonify({"success": "Prescription added successfully"}), HTTP_OK
+        return jsonify({"newId": ID_Prescription}), HTTP_OK
 
     except Exception as e:
         connection.rollback()
-        return jsonify({"error": str(e)}), HTTP_IM_A_TEAPOT
+        return jsonify({"error": str(e)}), HTTP_BAD_REQUEST

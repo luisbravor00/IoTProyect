@@ -65,4 +65,25 @@ def prescriptionsDetails_get_all():
 
     return jsonify(prescriptionDetails_list), HTTP_OK
 
+##Post pDetails
+@prescriptionDetails_blueprint.route('/add', methods=['POST'])
+def prescriptionDetails_post_prescriptionDetails():
+    data = request.json
+    ID_Detail = ut.generate_random_number()
+    print(f"Data is sent to details endpoint")
+    print(data)
+
+    if not all(key in data for key in ['ID_Prescription', 'ID_Medication', 'Times_Per_Day', 'Dose']):
+        return jsonify({"error": "Missing data from one or more fields"}), HTTP_IM_A_TEAPOT
+
+    query = "INSERT INTO Prescription_Details (ID_Detail, ID_Prescription, ID_Medication, Times_Per_Day, Dose) VALUES (:ID_Detail, :ID_Prescription, :ID_Medication, :Times_Per_Day, :Dose)"
+
+    try:
+        cursor.execute(query,  [ID_Detail ,data['ID_Prescription'], data['ID_Medication'], data['Times_Per_Day'], data['Dose']])
+        connection.commit()
+        return jsonify({"success": "Prescription added successfully"})
+    except Exception as e:
+        connection.rollback()
+        return jsonify({"error": str(e)}, HTTP_IM_A_TEAPOT)
+
 

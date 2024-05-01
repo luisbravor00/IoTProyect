@@ -3,14 +3,14 @@ $(document).ready(() => {
     const doctorId = urlParams.get('doctor_id');
         $.ajax({
             type: 'GET',
-            url: `doctorInterface/${doctorId}`,
+            url: `${APP_URL}/doctorInterface/${doctorId}`,
             contentType: 'application/json',
             success: function(response) {
                 const patientList = $('#patients');
                 patientList.empty();
 
                 response.forEach(function(patient) {
-                    const patientEntry = $('<li>').text(patient.name + ' ' + patient.last_name + ' ' + patient.age + ' ' + patient.phone);
+                    const patientEntry = $('<li>').text(patient.patientId + ' ' +  patient.name + ' ' + patient.last_name + ' ' + patient.age + ' ' + patient.phone);
                     patientList.append(patientEntry); 
                 });
             },
