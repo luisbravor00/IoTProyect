@@ -52,19 +52,22 @@ def doctors_get_doctor_by_id():
 @patients_blueprint.route('/add', methods=['POST'])
 def patient_post_patient():
     data = request.json
+    #"INSERT INTO Patients (ID_Patient, Name, Last_Name, Address, Age, Phone, Email)
 
-    if not all(key in data for key in['name', 'last_name', 'address', 'age', 'phone', 'email']):
+    if not all(key in data for key in['Name', 'Last_Name', 'Address', 'Age', 'Phone', 'Email']):
         return jsonify({"error": "Missing data for one or more fields."}), HTTP_BAD_REQUEST
+
+    print(f"Data reaches patient endpoint")
 
     ID_Patient = ut.generate_random_number()
 
-    query = "INSERT INTO Patient (patientId, name, last_name, address, age, phone, email) VALUES (:patientId, :name, :last_name, :address, :age, :phone, :email)"
+    query = "INSERT INTO Patients (ID_Patient, Name, Last_Name, Address, Age, Phone, Email) VALUES (:ID_Patient, :Name, :Last_Name, :Address, :Age, :Phone, :Email)"
 
+    print(f"Checkpoint before try")
     try:
-        cursor.execute(query, [ID_Patient, data['name'], data['last_name'], data['address'], data['age'], data['phone'], data['email']])
-
+        cursor.execute(query, [ID_Patient, data['Name'], data['Last_Name'], data['Address'], data['Age'], data['Phone'], data['Email']])
         connection.commit()
-        return jsonify({"success": "Patient added successfully."}), HTTP_OK
+        return jsonify({"newId": ID_Patient}), HTTP_OK
 
     except Exception as e:
         connection.rollback()
