@@ -3,6 +3,7 @@ from datetime import datetime
 from config.config import *
 from controllers.conn import connection, cursor
 import controllers.utilities as ut
+from controllers.querys import prescription_by_id
 
 prescriptions_blueprint = Blueprint('prescriptions', __name__)
 
@@ -56,6 +57,27 @@ def prescriptions_get_all():
     prescriptions_list = ut.get_dictionary_from_query(result, cursor)
 
     return jsonify(prescriptions_list), HTTP_OK
+
+## GET Prescription By Patient ID
+@prescriptions_blueprint.route('/prescription')
+def prescription_get_by_patient_id():
+    id_patient = request.args.get('id_patient', type=int)
+
+    if not id_patient:
+        return jsonify({"error": "Patient ID is required."}), 400  # HTTP_BAD_REQUEST
+
+    query = prescription_by_id
+    cursor.execute(query, [id_patient])
+    result = cursor.fetchall()
+
+    if not result:
+        return jsonify({"error": "No prescription found for the given patient ID."}), 404  # HTTP_NOT_FOUND
+
+    prescriptions_list = ut.get_dictionary_from_query(result, cursor)
+
+    return jsonify(prescriptions_list), 200  # HTTP_OK
+
+
 
 @prescriptions_blueprint.route('/<int:id_prescription>')
 def prescriptions_get_prescription_by_id(id_prescription):

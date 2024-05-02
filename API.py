@@ -11,6 +11,7 @@ from routes.medicine_route import medicine_blueprint
 from controllers.conn import connection, cursor
 from controllers import utilities as ut
 from config.config import *
+from controllers.querys import prescription_by_id
 
 load_dotenv()
 
@@ -110,9 +111,22 @@ def doctor_interface(doctor_id):
     return render_template('doctorInterface.html', doctor_name=doctor_name, doctor_id=doctor_id, patients=patients, medicines=medicine)
 
 @app.route("/patient_interface/<int:patient_id>")
-def patient_interface():
-    patient_name = authenticate_user(patient_id)[1]
-    return render_template('patientInterface.html', patient_name=patient_name, patient_id=patient_id)
+def patient_interface(patient_id):
+    query = "SELECT * FROM Patients WHERE ID_PATIENT = :id_patient"
+    cursor.execute(query, [patient_id])
+    result = cursor.fetchall()
+
+    patient = ut.get_dictionary_from_query(result, cursor)
+
+    query = prescription_by_id
+    cursor.execute(query, [patient_id])
+    result = cursor.fetchall()
+
+    prescriptions = ut.get_dictionary_from_query(result, cursor)
+    print(prescriptions)
+
+    upcoming_doses = ut.calculate_next_dosages(prescriptions)
+    return render_template('patientInterface.html', patient = patient, patient_id=patient_id, prescriptions = prescriptions, upcoming_doses=upcoming_doses)
 
 #post contact form, i just don't want to make another file 
 @app.route('/contact', methods=['POST'])
