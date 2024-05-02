@@ -1,9 +1,8 @@
 $(document).ready(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const doctorId = urlParams.get('doctor_id');
+    const doctor_id = $('#doctor-id').data('id');
         $.ajax({
             type: 'GET',
-            url: `${APP_URL}/doctorInterface/${doctorId}`,
+            url: `${APP_URL}/doctorInterface/${doctor_id}`,
             contentType: 'application/json',
             success: function(response) {
                 const patientList = $('#patients');

@@ -29,7 +29,7 @@ $(document).ready(() => {
                     contentType: 'application/json',
                     data: JSON.stringify(formData2),
                     success: function(response2) {
-                        alert(response2);
+                        alert(response2.success);
                     },
                     error: function(err) {
                         try {

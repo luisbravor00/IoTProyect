@@ -84,7 +84,8 @@ def doctor_interface(doctor_id):
     #doctor_id = request.args.get('doctor_id')
     doctor_name = authenticate_user(doctor_id)[1]
     #fetch the list of patients for the doctor
-    patients = getPatients(doctor_id)
+    patientData = getPatients(doctor_id)
+    patients = patientData
     #fetch medicine
     fetchMedicineQuery = """ SELECT DISTINCT(name) as name, ID_MEDICATION, active_ingredient, dosage_form 
                             FROM Medicine
@@ -133,7 +134,7 @@ def post_contact_form():
     
 
 ##fetching patients that belong to the doctor
-@app.route("/doctorInterface/<int:doctor_id>", methods=["GET"])
+#@app.route("/doctorInterface/<int:doctor_id>", methods=["GET", "POST"])
 def getPatients(doctor_id):
     #data = request.get_json()
     #doctor_id = data.get('user')
