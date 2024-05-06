@@ -24,75 +24,78 @@
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
               <a class="nav-link active" href="/">Home</a>
-              <a class="nav-link" href="/about">About Us</a>
-              <a class="nav-link" aria-current="page" href="/login">Login</a>
+            </div>
+            <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="/">Logout</a>
             </div>
           </div>
         </div>
     </nav>
-    <h1>
-        Welcome,  {{ doctor_name }}
-    </h1>
-
     
     <div id="doctor-id" data-id="{{ doctor_id }}"></div>
     
+    <div id="main" style="margin-left: 100px;">
 
+    <h1>
+        Welcome,  {{ doctor_name }}
+    </h1>
+        
     <div id="add-patient">
         <h2>Add New Patient</h2>
         <form id="patient-form">
-            <label for="patient-name">Name: </label>
-            <input type="text" id="name" name="name" required>
-            <label for="patient-last_name">Last Name: </label>
-            <input type="text" id="last_name" name="last_name" required>
-            <label for="address">Address: </label>
-            <input type="text" id="address" name="address" required>
-            <label for="age">Age: </label>
-            <input type="number" id="age" name="age" required>
-            <br>
-            <label for="phone">Phone: </label>
-            <input type="text" id="phone" name="phone" required>
-            <label for="email">Email: </label>
-            <input type="text" id="email" name="email" required>
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date" required>
-            <button type="submit" id="sumbit-patient"> Add Patient </button>
+            <label for="patient-name" class="form-label">Name:</label>
+            <input type="text" id="name" name="name" class="form-control" required>
+            <label for="patient-last_name" class="form-label">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" class="form-control" required>
+            <label for="address" class="form-label">Address:</label>
+            <input type="text" id="address" name="address" class="form-control" required>
+            <label for="age" class="form-label">Age:</label>
+            <input type="number" id="age" name="age" class="form-control" required>
+            <label for="phone" class="form-label">Phone:</label>
+            <input type="text" id="phone" name="phone" class="form-control" required>
+            <label for="email" class="form-label">Email:</label>
+            <input type="text" id="email" name="email" class="form-control" required>
+            <label for="date" class="form-label">Date:</label>
+            <input type="date" id="date" name="date" class="form-control" required>
+            <button type="submit" id="sumbit-patient" class="btn btn-primary mt-3">Add Patient</button>
         </form>
     </div>
+    <br>
 
     <div id="add-prescription">
         <h2>Add Prescription</h2>
         <form id="prescription-form">
-            <label for="patient-select">Select Patient:</label>
-            <select id="patient" name="patient">
+            <label for="patient-select" class="form-label">Select Patient:</label>
+            <select id="patient" name="patient" class="form-select">
                 {% for patient in patients %} 
-                    <option value="{{ patient.patientId }}"> {{ patient.name }} {{patient.last_name}}</option>
-                {% endfor %}
-            </select><br>
-            <label for="medicine-select">Select Medicine:</label>
-            <select id="medicine" name="medicine">
-                {% for medicine in medicines %}
-                    <option value="{{ medicine.medicineId }},{{ medicine.name }}"> {{ medicine.name }} </option>
+                    <option value="{{ patient.patientId }}">{{ patient.name }} {{patient.last_name}}</option>
                 {% endfor %}
             </select>
-            <label for="medicineAI-select">Medicine:</label>
-            <select id="medicineAI-select" name="medicineAI">
+            <label for="medicine-select" class="form-label">Select Medicine:</label>
+            <select id="medicine" name="medicine" class="form-select">
                 {% for medicine in medicines %}
-                    <option value="{{ medicine.activeIngredient }}"> {{medicine.activeIngredient}} </option>
+                    <option value="{{ medicine.medicineId }},{{ medicine.name }}">{{ medicine.name }}</option>
                 {% endfor %}
             </select>
-            <label for="dosage_form">Dosage Form:</label>
-            <input type="text" id="dosage_form" name="dosage_form" required>
-            <label for="dose">Dose:</label>
-            <input type="text" id="dose" name="dose" required>
-            <br>
-            <label for="TimesPerDay">Times Per Day:</label>
-            <input type="text" id="TimesPerDay" name="TimesPerDay" required>
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date" required:>
-            <button type="sumbit" id="submit-prescription"> Add Prescription </button>
+            <label for="medicineAI-select" class="form-label">Medicine:</label>
+            <select id="medicineAI-select" name="medicineAI" class="form-select">
+                {% for medicine in medicines %}
+                    <option value="{{ medicine.activeIngredient }}">{{medicine.activeIngredient}}</option>
+                {% endfor %}
+            </select>
+            <label for="dosage_form" class="form-label">Dosage Form:</label>
+            <input type="text" id="dosage_form" name="dosage_form" class="form-control" required>
+            <label for="dose" class="form-label">Dose:</label>
+            <input type="text" id="dose" name="dose" class="form-control" required>
+            <label for="TimesPerDay" class="form-label">Times Per Day:</label>
+            <input type="text" id="TimesPerDay" name="TimesPerDay" class="form-control" required>
+            <label for="date" class="form-label">Date:</label>
+            <input type="date" id="date" name="date" class="form-control" required>
+            <button type="sumbit" id="submit-prescription" class="btn btn-primary mt-3">Add Prescription</button>
         </form>
         <div id="prescription-response"></div>
+    </div>
+
     </div>
 
     <script>
